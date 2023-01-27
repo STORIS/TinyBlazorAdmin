@@ -50,7 +50,7 @@ namespace Cloud5mins.Function
 
         public UrlArchive(ILoggerFactory loggerFactory, AdminApiSettings settings)
         {
-            _logger = loggerFactory.CreateLogger<UrlList>();
+            _logger = loggerFactory.CreateLogger<UrlArchive>();
             _adminApiSettings = settings;
         }
 
@@ -75,16 +75,16 @@ namespace Cloud5mins.Function
                 // Validation of the inputs
                 if (req == null)
                 {
-                    return req.CreateResponse(  HttpStatusCode.NotFound);
+                    return req.CreateResponse(HttpStatusCode.NotFound);
                 }
 
                 using (var reader = new StreamReader(req.Body))
                 {
                     var body = reader.ReadToEnd();
-                    input = JsonSerializer.Deserialize<ShortUrlEntity>(body, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+                    input = JsonSerializer.Deserialize<ShortUrlEntity>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (input == null)
                     {
-                        return req.CreateResponse(  HttpStatusCode.NotFound);
+                        return req.CreateResponse(HttpStatusCode.NotFound);
                     }
                 }
 
@@ -96,13 +96,13 @@ namespace Cloud5mins.Function
             {
                 _logger.LogError(ex, "An unexpected error was encountered.");
                 var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteAsJsonAsync(new  { Message =  ex.Message} );    
-                return badRequest;   
+                await badRequest.WriteAsJsonAsync(new { Message = ex.Message });
+                return badRequest;
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(result);   
-            return response;   
+            await response.WriteAsJsonAsync(result);
+            return response;
         }
     }
 }

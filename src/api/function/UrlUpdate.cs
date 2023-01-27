@@ -56,7 +56,7 @@ namespace Cloud5mins.Function
 
         public UrlUpdate(ILoggerFactory loggerFactory, AdminApiSettings settings)
         {
-            _logger = loggerFactory.CreateLogger<UrlList>();
+            _logger = loggerFactory.CreateLogger<UrlUpdate>();
             _adminApiSettings = settings;
         }
 
@@ -83,7 +83,7 @@ namespace Cloud5mins.Function
                 // Validation of the inputs
                 if (req == null)
                 {
-                    return req.CreateResponse(  HttpStatusCode.NotFound);
+                    return req.CreateResponse(HttpStatusCode.NotFound);
                 }
 
                 using (var reader = new StreamReader(req.Body))
@@ -92,7 +92,7 @@ namespace Cloud5mins.Function
                     input = JsonSerializer.Deserialize<ShortUrlEntity>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (input == null)
                     {
-                        return req.CreateResponse(  HttpStatusCode.NotFound);
+                        return req.CreateResponse(HttpStatusCode.NotFound);
                     }
                 }
 
@@ -100,16 +100,16 @@ namespace Cloud5mins.Function
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
                     var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new  { Message = "The url parameter can not be empty."} );    
-                    return badRequest;     
+                    await badRequest.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
+                    return badRequest;
                 }
 
                 // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badRequest.WriteAsJsonAsync(new  { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'."} );    
-                    return badRequest;   
+                    await badRequest.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
+                    return badRequest;
                 }
 
                 StorageTableHelper stgHelper = new StorageTableHelper(_adminApiSettings.UlsDataStorage);
@@ -124,13 +124,13 @@ namespace Cloud5mins.Function
                 _logger.LogError(ex, "An unexpected error was encountered.");
 
                 var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteAsJsonAsync(new  { Message =  ex.Message} );    
-                return badRequest;   
+                await badRequest.WriteAsJsonAsync(new { Message = ex.Message });
+                return badRequest;
             }
-       
+
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(result);   
-            return response;    
+            await response.WriteAsJsonAsync(result);
+            return response;
         }
     }
 }
