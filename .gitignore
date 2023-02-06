@@ -355,3 +355,7 @@ MigrationBackup/
 src/TinyBlazorAdmin/wwwroot/appsettings.json
 src/TinyBlazorAdmin/wwwroot/appsettings.Development.json
 
+/src/api/Properties/ServiceDependencies/UrlShortener-kmm - Zip Deploy1/profile.arm.json
+/src/api/Properties/ServiceDependencies/UrlShortener-kmm - Zip Deploy/profile.arm.json
+/src/api/Properties/serviceDependencies.local.json
+/src/api/Properties/serviceDependencies.json
