@@ -1,27 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyBlazorAdmin", "client\TinyBlazorAdmin.csproj", "{2190B73D-DF38-45D8-88C1-6CDF49E68D68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UrlShortner", "api\UrlShortner.csproj", "{3663F7F4-2064-423E-9928-3F1D25E3F2D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi", "api\AdminApi.csproj", "{3663F7F4-2064-423E-9928-3F1D25E3F2D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azShortenerLib", "lib\azShortenerLib.csproj", "{3E0E3C70-A56F-4565-ADE2-E3E585D1CBFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azShortenerLib", "lib\azShortenerLib.csproj", "{3E0E3C70-A56F-4565-ADE2-E3E585D1CBFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2190B73D-DF38-45D8-88C1-6CDF49E68D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2190B73D-DF38-45D8-88C1-6CDF49E68D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2190B73D-DF38-45D8-88C1-6CDF49E68D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2190B73D-DF38-45D8-88C1-6CDF49E68D68}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3663F7F4-2064-423E-9928-3F1D25E3F2D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3663F7F4-2064-423E-9928-3F1D25E3F2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3663F7F4-2064-423E-9928-3F1D25E3F2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +21,11 @@ Global
 		{3E0E3C70-A56F-4565-ADE2-E3E585D1CBFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E0E3C70-A56F-4565-ADE2-E3E585D1CBFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E0E3C70-A56F-4565-ADE2-E3E585D1CBFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B23E82DB-25F5-4EB6-B5EB-0C780B9C7088}
 	EndGlobalSection
 EndGlobal

@@ -71,6 +71,24 @@ namespace Cloud5mins.AzShortener
             return lstShortUrl;
         }
 
+
+        public async Task<List<ShortUrlEntity>> GetShortUrlEntitiesToPurge(int olderThanDays)
+        {
+            var urlsTable = GetUrlsTable();
+            TableContinuationToken token = null;
+            var shortUrlEntities = new List<ShortUrlEntity>();
+            var queryCondition = DateTimeOffset.UtcNow.AddDays(olderThanDays * -1);
+            var query = new TableQuery<ShortUrlEntity>().Where(
+                    filter: TableQuery.GenerateFilterConditionForDate("Timestamp", QueryComparisons.LessThan, queryCondition));
+            do
+            {
+                var queryResult = await urlsTable.ExecuteQuerySegmentedAsync(query, token);
+                shortUrlEntities.AddRange(queryResult.Results as List<ShortUrlEntity>);
+                token = queryResult.ContinuationToken;
+            } while (token != null);
+            return shortUrlEntities;
+        }
+
         /// <summary>
         /// Returns the ShortUrlEntity of the <paramref name="vanity"/>
         /// </summary>
@@ -191,6 +209,12 @@ namespace Cloud5mins.AzShortener
             originalUrl.IsArchived = true;
 
             return await SaveShortUrlEntity(originalUrl);
+        }
+
+        public async Task DeleteShortUrlEntity(ShortUrlEntity shortUrlEntity)
+        {
+            TableOperation deleteOperation = TableOperation.Delete(shortUrlEntity);
+            TableResult result = await GetUrlsTable().ExecuteAsync(deleteOperation);
         }
     }
 }
