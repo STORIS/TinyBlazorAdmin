@@ -15,8 +15,8 @@ Input:
 
 Output:
     {
-        "ShortUrl": "http://c5m.ca/azFunc",
-        "LongUrl": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio"
+        "shortUrl": "http://c5m.ca/azFunc",
+        "longUrl": "https://docs.microsoft.com/en-ca/azure/azure-functions/functions-create-your-first-function-visual-studio"
     }
 */
 
@@ -79,7 +79,7 @@ namespace Cloud5mins.Function
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
+                    await badResponse.WriteAsJsonAsync(new { message = "The url parameter can not be empty." });
                     return badResponse;
                 }
 
@@ -87,7 +87,7 @@ namespace Cloud5mins.Function
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
+                    await badResponse.WriteAsJsonAsync(new { message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'." });
                     return badResponse;
                 }
 
@@ -106,7 +106,7 @@ namespace Cloud5mins.Function
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                        await badResponse.WriteAsJsonAsync(new { Message = "This Short URL already exist." });
+                        await badResponse.WriteAsJsonAsync(new { message = "This Short URL already exist." });
                         return badResponse;
                     }
                 }
@@ -125,9 +125,9 @@ namespace Cloud5mins.Function
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error was encountered.");
-
+                
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badResponse.WriteAsJsonAsync(new { Message = ex.Message });
+                await badResponse.WriteAsJsonAsync(new { message = ex.Message });
                 return badResponse;
             }
 
