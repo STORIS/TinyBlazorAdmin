@@ -87,7 +87,7 @@ namespace Cloud5mins.Function
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new { message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
+                    await badResponse.WriteAsJsonAsync(new { message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'." });
                     return badResponse;
                 }
 
