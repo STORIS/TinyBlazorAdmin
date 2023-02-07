@@ -29,7 +29,9 @@ namespace UrlPurger.function
             var urlsToPurge = await storageTableHelper.GetShortUrlEntitiesToPurge(7);
             foreach (var urlToPurge in urlsToPurge)
             {
+
                 _logger.LogInformation($"Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}");
+
                 await storageTableHelper.DeleteShortUrlEntity(urlToPurge);
             }
         }

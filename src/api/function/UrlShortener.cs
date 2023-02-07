@@ -125,7 +125,7 @@ namespace Cloud5mins.Function
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error was encountered.");
-
+                
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                 await badResponse.WriteAsJsonAsync(new { message = ex.Message });
                 return badResponse;
