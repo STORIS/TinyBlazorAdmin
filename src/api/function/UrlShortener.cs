@@ -20,18 +20,17 @@ Output:
     }
 */
 
-using System;
-using System.Threading.Tasks;
+using Cloud5mins.AzShortener;
+using Cloud5mins.domain;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System;
 using System.IO;
+using System.Net;
 using System.Text.Json;
 using System.Threading;
-
-using Cloud5mins.domain;
-using Cloud5mins.AzShortener;
+using System.Threading.Tasks;
 
 namespace Cloud5mins.Function
 {
@@ -69,7 +68,7 @@ namespace Cloud5mins.Function
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();
-                    input = JsonSerializer.Deserialize<ShortRequest>(strBody, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+                    input = JsonSerializer.Deserialize<ShortRequest>(strBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (input == null)
                     {
                         return req.CreateResponse(HttpStatusCode.NotFound);
@@ -80,7 +79,7 @@ namespace Cloud5mins.Function
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new {Message = "The url parameter can not be empty."});
+                    await badResponse.WriteAsJsonAsync(new { Message = "The url parameter can not be empty." });
                     return badResponse;
                 }
 
@@ -88,7 +87,7 @@ namespace Cloud5mins.Function
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                    await badResponse.WriteAsJsonAsync(new {Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'."});
+                    await badResponse.WriteAsJsonAsync(new { Message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'http://'." });
                     return badResponse;
                 }
 
@@ -107,7 +106,7 @@ namespace Cloud5mins.Function
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                        await badResponse.WriteAsJsonAsync(new {Message = "This Short URL already exist."});
+                        await badResponse.WriteAsJsonAsync(new { Message = "This Short URL already exist." });
                         return badResponse;
                     }
                 }
@@ -118,7 +117,7 @@ namespace Cloud5mins.Function
 
                 await stgHelper.SaveShortUrlEntity(newRow);
 
-                var host = string.IsNullOrEmpty(_adminApiSettings.customDomain) ? req.Url.Host: _adminApiSettings.customDomain.ToString();
+                var host = string.IsNullOrEmpty(_adminApiSettings.customDomain) ? req.Url.Host : _adminApiSettings.customDomain.ToString();
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
                 _logger.LogInformation("Short Url created.");
@@ -128,12 +127,14 @@ namespace Cloud5mins.Function
                 _logger.LogError(ex, "An unexpected error was encountered.");
 
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badResponse.WriteAsJsonAsync(new {Message = ex.Message});
+                await badResponse.WriteAsJsonAsync(new { Message = ex.Message });
                 return badResponse;
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(result);
+            response.Headers.Add("Content-Type", "application/json");
+            var serializedResult = JsonSerializer.Serialize<ShortResponse>(result, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            await response.WriteStringAsync(serializedResult);
 
             return response;
         }

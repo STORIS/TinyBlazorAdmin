@@ -8,6 +8,6 @@ namespace Cloud5mins.AzShortener
 
         public string Title { get; set; }
 
-        public Schedule[] Schedules { get; set; }
+        public Schedule[]? Schedules { get; set; } = new Schedule[0];
     }
 }
