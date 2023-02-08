@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "Dev-STORIS-URL-Shortener-Frontend"
+  AZURE_FUNCTIONAPP_NAME: "Dev-STORIS-URL-Shortener"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./src"
   DOTNET_VERSION: "6.0.x"
 
