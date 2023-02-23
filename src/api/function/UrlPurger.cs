@@ -10,27 +10,27 @@ namespace UrlPurger.function
 
     public class UrlPurger
     {
-        private readonly ILogger _logger;
+        private NLogWrapper logger;
         private readonly AdminApiSettings _adminApiSettings;
 
         public UrlPurger(ILoggerFactory loggerFactory, AdminApiSettings settings)
         {
-            _logger = loggerFactory.CreateLogger<UrlPurger>();
+            logger = new NLogWrapper(LoggerType.UrlPurger, settings);
             _adminApiSettings = settings;
         }
 
         [Function("UrlPurger")]
         public async Task Run([TimerTrigger("0 0 6 * * *", RunOnStartup = true)] MyInfo myTimer)
         {
-            _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
+            logger.Log(NLog.LogLevel.Info, "C# Timer trigger function executed at: {trigger.current}", DateTime.Now.ToString());
+            logger.Log(NLog.LogLevel.Info, "Next timer schedule at: {trigger.next}", myTimer.ScheduleStatus.Next.ToString());
 
             var storageTableHelper = new StorageTableHelper(_adminApiSettings.UlsDataStorage);
             var urlsToPurge = await storageTableHelper.GetShortUrlEntitiesToPurge(7);
             foreach (var urlToPurge in urlsToPurge)
             {
 
-                _logger.LogInformation($"Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}");
+                logger.Log(NLog.LogLevel.Info, "Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}", urlToPurge.ShortUrl, urlToPurge.Title, urlToPurge.Timestamp.ToString());
 
                 await storageTableHelper.DeleteShortUrlEntity(urlToPurge);
             }
