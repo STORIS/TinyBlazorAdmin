@@ -22,8 +22,8 @@ namespace UrlPurger.function
         [Function("UrlPurger")]
         public async Task Run([TimerTrigger("0 0 6 * * *", RunOnStartup = true)] MyInfo myTimer)
         {
-            logger.Log(NLog.LogLevel.Info, "C# Timer trigger function executed at: {trigger.current}", DateTime.Now.ToString());
-            logger.Log(NLog.LogLevel.Info, "Next timer schedule at: {trigger.next}", myTimer.ScheduleStatus.Next.ToString());
+            logger.Log(NLog.LogLevel.Info, "C# Timer trigger function executed at {trigger.current}", DateTime.Now.ToString());
+            logger.Log(NLog.LogLevel.Info, "Next timer scheduled for {trigger.next}", myTimer.ScheduleStatus.Next.ToString());
 
             var storageTableHelper = new StorageTableHelper(_adminApiSettings.UlsDataStorage);
             var urlsToPurge = await storageTableHelper.GetShortUrlEntitiesToPurge(7);
