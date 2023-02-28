@@ -63,7 +63,7 @@ public class NLogWrapper
 
     private string buildTags()
     {
-        return String.Format("env:{0},service:{1},assemblyversion:{2}", shortenerSettings.env, serviceName, shortenerSettings.version);
+        return String.Format("env:{0},service:{1},version:{2}", shortenerSettings.env, serviceName, shortenerSettings.version);
     }
 
     private void getCallerName()
