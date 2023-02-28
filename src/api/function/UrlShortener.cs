@@ -37,12 +37,12 @@ namespace Cloud5mins.Function
 
     public class UrlShortener
     {
-        private readonly ILogger _logger;
+        private NLogWrapper logger;
         private readonly AdminApiSettings _adminApiSettings;
 
         public UrlShortener(ILoggerFactory loggerFactory, AdminApiSettings settings)
         {
-            _logger = loggerFactory.CreateLogger<UrlShortener>();
+            logger = new NLogWrapper(LoggerType.UrlShortener, settings);
             _adminApiSettings = settings;
         }
 
@@ -52,7 +52,6 @@ namespace Cloud5mins.Function
             ExecutionContext context
         )
         {
-            _logger.LogInformation($"__trace creating shortURL: {req}");
             string userId = string.Empty;
             ShortRequest input;
             var result = new ShortResponse();
@@ -78,6 +77,7 @@ namespace Cloud5mins.Function
                 // If the Url parameter only contains whitespaces or is empty return with BadRequest.
                 if (string.IsNullOrWhiteSpace(input.Url))
                 {
+                    logger.Log(NLog.LogLevel.Warn, "The url parameter can not be empty.");
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                     await badResponse.WriteAsJsonAsync(new { message = "The url parameter can not be empty." });
                     return badResponse;
@@ -86,6 +86,7 @@ namespace Cloud5mins.Function
                 // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
+                    logger.Log(NLog.LogLevel.Warn, "{url.longUrl} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'.", input.Url);
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                     await badResponse.WriteAsJsonAsync(new { message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'." });
                     return badResponse;
@@ -105,8 +106,9 @@ namespace Cloud5mins.Function
                     newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
+                        logger.Log(NLog.LogLevel.Warn, "The Short URL {url.shortUrl} already exists.", vanity);
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
-                        await badResponse.WriteAsJsonAsync(new { message = "This Short URL already exist." });
+                        await badResponse.WriteAsJsonAsync(new { message = $"The Short URL {vanity} already exists." });
                         return badResponse;
                     }
                 }
@@ -120,12 +122,11 @@ namespace Cloud5mins.Function
                 var host = string.IsNullOrEmpty(_adminApiSettings.customDomain) ? req.Url.Host : _adminApiSettings.customDomain.ToString();
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
-                _logger.LogInformation("Short Url created.");
+                logger.Log(NLog.LogLevel.Info, "Short Url {url.shortUrl} for url {url.longUrl} created", newRow.RowKey, longUrl);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error was encountered.");
-                
+                logger.Log(NLog.LogLevel.Error, "An unexpected error was encountered: {message}", ex.Message);
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                 await badResponse.WriteAsJsonAsync(new { message = ex.Message });
                 return badResponse;

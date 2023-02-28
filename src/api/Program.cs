@@ -22,6 +22,7 @@ namespace Cloud5mins.AdminApi
                     {
                         var configuration = context.Configuration;
                         AdminApiSettings = new AdminApiSettings();
+                        AdminApiSettings.version = typeof(Program).Assembly.GetName().Version.ToString();
                         configuration.Bind(AdminApiSettings);
                         return configuration;
                     });
