@@ -30,7 +30,7 @@ namespace UrlPurger.function
             foreach (var urlToPurge in urlsToPurge)
             {
 
-                logger.Log(NLog.LogLevel.Info, "Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}", urlToPurge.ShortUrl, urlToPurge.Title, urlToPurge.Timestamp.ToString());
+                logger.Log(NLog.LogLevel.Info, "Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}", urlToPurge.RowKey, urlToPurge.Title, urlToPurge.Timestamp.ToString());
 
                 await storageTableHelper.DeleteShortUrlEntity(urlToPurge);
             }

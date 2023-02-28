@@ -7,5 +7,6 @@ namespace Cloud5mins.domain
         public string UlsDataStorage { get; set; }
         public string env { get; set; }
         public string dataDogKey { get; set; }
+        public string version { get; set; }
     }
 }

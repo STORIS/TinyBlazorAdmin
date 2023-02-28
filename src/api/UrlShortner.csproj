@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <OutputType>Exe</OutputType>
     <UserSecretsId>937ee208-94cc-44c3-8e4a-e2496723b09d</UserSecretsId>
   </PropertyGroup>

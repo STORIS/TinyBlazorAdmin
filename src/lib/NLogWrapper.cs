@@ -31,7 +31,7 @@ public class NLogWrapper
         LogManager.Configuration = configuration;
 
         var tags = buildTags();
-        logger = logger.WithProperty("service", serviceName).WithProperty("env", shortenerSettings.env).WithProperty("ddtags", tags);
+        logger = logger.WithProperty("service", serviceName).WithProperty("env", shortenerSettings.env).WithProperty("version", shortenerSettings.version).WithProperty("ddtags", tags);
 
         getCallerName();
 
@@ -63,7 +63,7 @@ public class NLogWrapper
 
     private string buildTags()
     {
-        return String.Format("env:{0},service:{1}", shortenerSettings.env, serviceName);
+        return String.Format("env:{0},service:{1},assemblyversion:{2}", shortenerSettings.env, serviceName, shortenerSettings.version);
     }
 
     private void getCallerName()
