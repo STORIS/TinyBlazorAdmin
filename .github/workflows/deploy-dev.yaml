@@ -1,4 +1,4 @@
-name: Deploy DotNet project to Azure Function App
+name: Deploy DotNet project to Azure Function App dev
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: dev
     steps:
       - name: "Checkout GitHub Action"
