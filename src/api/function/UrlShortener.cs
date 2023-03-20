@@ -64,6 +64,12 @@ namespace Cloud5mins.Function
                     return req.CreateResponse(HttpStatusCode.NotFound);
                 }
 
+                if (req.Method == "GET")
+                {
+                    // being called from KeepAlive function
+                    return req.CreateResponse(HttpStatusCode.OK);
+                }
+
                 using (var reader = new StreamReader(req.Body))
                 {
                     var strBody = reader.ReadToEnd();

@@ -20,7 +20,7 @@ namespace UrlPurger.function
         }
 
         [Function("UrlPurger")]
-        public async Task Run([TimerTrigger("0 0 6 * * *", RunOnStartup = true)] MyInfo myTimer)
+        public async Task Run([TimerTrigger("0 0 6 * * *")] MyInfo myTimer)
         {
             logger.Log(NLog.LogLevel.Info, "C# Timer trigger function executed at {trigger.current}", DateTime.Now.ToString());
             logger.Log(NLog.LogLevel.Info, "Next timer scheduled for {trigger.next}", myTimer.ScheduleStatus.Next.ToString());
