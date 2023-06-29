@@ -20,7 +20,7 @@ namespace UrlPurger.function
         }
 
         [Function("UrlPurger")]
-        public async Task Run([TimerTrigger("0 0 6 * * *", RunOnStartup = true)] MyInfo myTimer)
+        public async Task Run([TimerTrigger("0 0 6 * * *", RunOnStartup = false)] MyInfo myTimer)
         {
             logger.Log(NLog.LogLevel.Info, "C# Timer trigger function executed at {trigger.current}", DateTime.Now.ToString());
             logger.Log(NLog.LogLevel.Info, "Next timer scheduled for {trigger.next}", myTimer.ScheduleStatus.Next.ToString());
@@ -30,7 +30,7 @@ namespace UrlPurger.function
             foreach (var urlToPurge in urlsToPurge)
             {
 
-                logger.Log(NLog.LogLevel.Info, "Deleting ShortUrl: {urlToPurge.ShortUrl} | Title: {urlToPurge.Title} | CreatedAt: {urlToPurge.Timestamp}", urlToPurge.RowKey, urlToPurge.Title, urlToPurge.Timestamp.ToString());
+                logger.Log(NLog.LogLevel.Info, "Deleting ShortUrl: {0} | Title: {1} | CreatedAt: {2}", urlToPurge.RowKey, urlToPurge.Title, urlToPurge.Timestamp.ToString());
 
                 await storageTableHelper.DeleteShortUrlEntity(urlToPurge);
             }
