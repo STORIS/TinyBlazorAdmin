@@ -86,7 +86,7 @@ namespace Cloud5mins.Function
                 // Validates if input.url is a valid aboslute url, aka is a complete refrence to the resource, ex: http(s)://google.com
                 if (!Uri.IsWellFormedUriString(input.Url, UriKind.Absolute))
                 {
-                    logger.Log(NLog.LogLevel.Warn, "{url.longUrl} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'.", input.Url);
+                    logger.Log(NLog.LogLevel.Warn, "{0} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'.", input.Url);
                     var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                     await badResponse.WriteAsJsonAsync(new { message = $"{input.Url} is not a valid absolute Url. The Url parameter must start with 'http://' or 'https://'." });
                     return badResponse;
@@ -106,7 +106,7 @@ namespace Cloud5mins.Function
                     newRow = new ShortUrlEntity(longUrl, vanity, title, input.Schedules);
                     if (await stgHelper.IfShortUrlEntityExist(newRow))
                     {
-                        logger.Log(NLog.LogLevel.Warn, "The Short URL {url.shortUrl} already exists.", vanity);
+                        logger.Log(NLog.LogLevel.Warn, "The Short URL {0} already exists.", vanity);
                         var badResponse = req.CreateResponse(HttpStatusCode.Conflict);
                         await badResponse.WriteAsJsonAsync(new { message = $"The Short URL {vanity} already exists." });
                         return badResponse;
@@ -122,11 +122,11 @@ namespace Cloud5mins.Function
                 var host = string.IsNullOrEmpty(_adminApiSettings.customDomain) ? req.Url.Host : _adminApiSettings.customDomain.ToString();
                 result = new ShortResponse(host, newRow.Url, newRow.RowKey, newRow.Title);
 
-                logger.Log(NLog.LogLevel.Info, "Short Url {url.shortUrl} for url {url.longUrl} created", newRow.RowKey, longUrl);
+                logger.Log(NLog.LogLevel.Info, "Short Url {0} for url {1} created", newRow.RowKey, longUrl);
             }
             catch (Exception ex)
             {
-                logger.Log(NLog.LogLevel.Error, "An unexpected error was encountered: {message}", ex.Message);
+                logger.Log(NLog.LogLevel.Error, "An unexpected error was encountered: {0}", ex.Message);
                 var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                 await badResponse.WriteAsJsonAsync(new { message = ex.Message });
                 return badResponse;
