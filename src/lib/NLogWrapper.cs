@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web;
-using Cloud5mins.domain;
+﻿using Cloud5mins.domain;
 using NLog;
 
 public enum LoggerType
@@ -23,7 +21,7 @@ public class NLogWrapper
         initializeLogger(loggerType, settings);
     }
 
-    public void Log(LogLevel logLevel, String message, string arg1 = null, string arg2 = null, string arg3 = null)
+    public void Log(LogLevel logLevel, String message, params object[] args)
     {
         NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration("NLog.config");
         var configuration = LogManager.Configuration;
@@ -35,7 +33,7 @@ public class NLogWrapper
 
         getCallerName();
 
-        logger.Log(logLevel, message, arg1, arg2);
+        logger.Log(logLevel, message, args);
     }
 
     private void initializeLogger(LoggerType loggerType, AdminApiSettings settings)
